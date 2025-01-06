@@ -16,13 +16,19 @@ function getSeason(date) {
     return 'Unable to determine the time of year!';
   }
 
-  if (Object.prototype.toString.call(date) !== '[object Date]' || isNaN(date.getTime())) {
+  if (
+    !(date instanceof Date) || 
+    typeof date.getMonth !== 'function' || 
+    typeof date.getFullYear !== 'function' ||
+    Object.getOwnPropertyNames(date).length > 0 || 
+    isNaN(date.getTime())
+  ) {
     throw new Error('Invalid date!');
   }
 
   const month = date.getMonth();
 
-  if (month === 0 || month === 1 || month === 11) {
+  if (month === 11 || month === 0 || month === 1) {
     return 'winter';
   } else if (month >= 2 && month <= 4) {
     return 'spring';
@@ -32,7 +38,6 @@ function getSeason(date) {
     return 'autumn';
   }
 }
-
 module.exports = {
   getSeason
 };
